@@ -1,0 +1,60 @@
+
+#title
+{
+   background-color : #79BAE8;
+   text-align : center;
+   padding-top : 1;
+   padding-bottom : 1;
+   border-radius : 5;
+}
+#TextFieldStackLen ,
+#TextFieldPushValue
+{
+  text-align : center ;
+  color : #020303;
+  font-family: "Arial Black", "Arial Bold", Gadget, sans-serif;
+  background-color : #EDE1E5;
+  border-radius : 5;
+}
+
+#header
+{
+   text-align : center;
+   background-color : #6EF59D;
+   padding-top : 4;
+   padding-bottom : 4;
+}
+
+#ButtonPop , #ButtonPush , #ButtonCreateStack
+{
+    background-color : #F56E80;
+    padding-left : 4px;
+    padding-bottom : 4px;
+    text-align : center;
+    vertical-align: middle;
+    border-radius : 5px;
+    color : #F7F0F2;
+    
+}
+
+#ButtonPop
+{
+  margin-left : 50px;
+  margin-right : 50px;
+}
+
+.container
+{
+  display : inline-block;
+}
+#canvas
+{
+   background-color : #D6D2D6;
+}
+#desc
+{
+   width: 327;
+   height : 500;
+   background-color : #98AAF5;
+}
+
