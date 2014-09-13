@@ -178,6 +178,7 @@ function  MyArray(sx,sy,w,d,arr)
              }
              console.log("vikramaditya............");
              arraycontext.pointers[name] = new Pointer(elemindex,text,name,flag);
+             return arraycontext.pointers[name];     
     }
     
     this.getPointer=   function(name)
