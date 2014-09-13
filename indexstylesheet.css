@@ -1,0 +1,72 @@
+body
+{
+ background-color : #DAEBDA;
+}
+#titlecontainer
+{
+   background-color : #49B8AB;
+   text-align : center;
+   padding-top : 0.5em;
+   padding-bottom : 0.5em;
+   margin-left : 10%;
+   margin-right : 10%;
+   height : 15%;
+   color : ffffff;
+}
+#titlecontainer:hover
+{
+     background-color : #03A895; 
+}
+
+.horizantal
+{
+  display : inline-block;
+  height : 80%;
+}
+
+#algocontainer
+{
+  background-color : #9E9DA1;
+  width : 20%;
+  margin-left : 10%;
+}
+
+#desccontainrer
+{
+  background-color : #9E9DA1;
+  width : 55%;
+  margin-right : 10%;
+  float : right;
+}
+
+#bodycontainer
+{
+   margin-top : 2%;
+  
+}
+
+.algodivs
+{   
+   margin-top : 5%;
+   background-color : #ffffff;
+   padding-top : 4px;
+   padding-bottom : 4px;
+   text-align : center;
+   margin-left : 4%;
+   margin-right:4%;
+}
+.algodivs:hover
+{
+   background-color : #A1F7A1;
+}
+
+a
+{
+   text-decoration : none;
+}
+
+
+
+
+
+
