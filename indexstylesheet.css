@@ -10,7 +10,7 @@ body
    padding-bottom : 0.5em;
    margin-left : 10%;
    margin-right : 10%;
-   height : 15%;
+   height : 12%;
    color : ffffff;
 }
 #titlecontainer:hover
@@ -29,14 +29,20 @@ body
   background-color : #9E9DA1;
   width : 20%;
   margin-left : 10%;
+  overflow : auto;
 }
 
 #desccontainrer
 {
   background-color : #9E9DA1;
   width : 55%;
-  margin-right : 10%;
-  float : right;
+/*  margin-right : 10%; */
+  position  : absolute;
+  top : 0;
+ /* float : right; */
+  right : 10%;
+  overflow : auto;
+  height : 100%;
 }
 
 #desccontainrer:hover
@@ -47,6 +53,7 @@ body
 #bodycontainer
 {
    margin-top : 2%;
+   position : relative;
   
 }
 
