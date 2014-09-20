@@ -59,6 +59,7 @@ function  MyArray(sx,sy,w,d,arr,attribs)
        {
            text = ""
        }
+       attributes = attributes || {};
        var elempos = new ElementPosition(arraycontext.ex,arraycontext.ey,arraycontext.w,arraycontext.d);
        arraycontext.ex = arraycontext.ex+arraycontext.w;
        this.elemPosition = elempos;
@@ -266,6 +267,7 @@ function  MyArray(sx,sy,w,d,arr,attribs)
        {
            for(var i=0;i<arraycontext.len;i++)
            {
+               attribs = attribs || {};
                arraycontext.elements[i] = new Element("",attribs["element"]);
            }
        }
