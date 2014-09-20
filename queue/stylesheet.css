@@ -1,0 +1,151 @@
+body
+{
+ background-color : #D7E3F7;
+}
+#titlecontainer
+{
+   background-color : #699EFA;
+   text-align : center;
+   padding-top : 0.5em;
+   padding-bottom : 0.5em;
+   margin-left : 3%;
+   margin-right : 3%;
+   height : 10%;
+   color : ffffff;
+}
+#titlecontainer:hover
+{
+     background-color : #4080F7; 
+}
+
+#canvas
+{
+   margin-left : 3%;
+   margin-right : 3%;
+}
+#inputcontainer
+{
+   margin-top : 2%;
+   height : 5%;
+   margin-left : 3%;
+   margin-right : 3%;
+  /* background-color : #40F7E5; */
+   position : relative;
+}
+
+#inputcontainer:hover
+{
+        
+}
+.button
+{
+    cursor : pointer;
+    background: -webkit-linear-gradient(#72A3F7, #055FFA); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(#72A3F7, #055FFA); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(#72A3F7, #055FFA); /* For Firefox 3.6 to 15 */
+    background: linear-gradient( #72A3F7, #055FFA); /* Standard syntax (must be last) */
+    border-radius : 5px;
+    height : 100%;
+    border : 1px solid #055FFA;
+    color : #ffffff;
+    font-size: 75%;
+    
+}
+
+.button:hover
+{
+    cursor : pointer;
+    background: -webkit-linear-gradient(#055FFA, #055FFA); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(#055FFA, #72A3F7); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(#055FFA, #72A3F7); /* For Firefox 3.6 to 15 */
+    background: linear-gradient( #055FFA, #72A3F7); /* Standard syntax (must be last) */
+    border-radius : 5px;
+    height : 100%;
+    border : 1px solid #055FFA;    
+}
+.textfield
+{
+   height : 100%;
+   border : 1px solid #A3C2F7;
+   border-radius : 5px;
+   padding : 0px;
+   font-size : 75%;
+}
+.textfield:hover
+{
+    border: 1px solid #07c;
+    box-shadow: 0 0 10px #07c;
+}
+
+#ButtonEnqueue
+{
+ width : 25%;
+ margin-right:2%;
+ padding : 0;
+}
+#enqueuevalue
+{
+  width : 50%;
+}
+
+
+#dequeue
+{
+  width : 25%;
+  float : right;
+  padding : 0;
+}
+#TextFieldDequeueValue
+{
+  width : 50%;
+  margin-left : 20%;
+}
+#TextFieldQueueLen
+{
+   width : 50%;
+   
+}
+#CreateQueue,
+#clearqueue
+{
+   width : 20%;
+}
+#enqueueContainer
+{
+  float : left;
+  display : inline-block;
+ /* background-color : #368F86; */
+  height : 100%;
+  width : 20%;
+  margin-right : 10%;
+} 
+#creationcontainer
+{
+  /*background-color : #CC729F; */
+  display : inline-block;
+  height : 100%;
+  width : 40%;
+  text-align : center;
+}
+#dequeuecontainer
+{
+  float : right;
+  display : inline-block;
+  
+  /*background-color : #A1CC72; */
+  height : 100%;
+  width : 20%;  
+}
+
+#overlay {
+   position: absolute;
+   top: 0;
+   left: 0;
+   right: 0;
+   bottom: 0;
+   opacity: 0.30;
+   background: #D7E3F7;
+   z-index: 10;
+   display: none;
+}
+}
