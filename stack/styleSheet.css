@@ -58,3 +58,7 @@
    background-color : #98AAF5;
 }
 
+#bodycontainer
+{
+   overflow : auto;
+}
