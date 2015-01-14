@@ -98,7 +98,14 @@ function  MyArray(sx,sy,w,d,arr,attribs)
          {
             this.elem.remove();
             this.elemText.remove();
-         }        
+         }
+        this.updateText = function(attribs)
+             {
+                for( var key in attribs)
+                {
+                   this.elemText.attr({key : attribs[key]});
+                }
+             }             
         
     }
     /***
@@ -199,7 +206,8 @@ function  MyArray(sx,sy,w,d,arr,attribs)
                         }
                      }                     
           
-        }        
+        }
+        
     this.createPointer = function(elemindex,text,name,flag,attributes)
     {
              if(elemindex > this.len)
@@ -254,20 +262,121 @@ function  MyArray(sx,sy,w,d,arr,attribs)
                    {
                      this.elements[elemindex-1].fillColor(color);
                    }
-    function main()
+    this.moveElement = function( sourceindex,targetindex,sourcetext,flag,callback,specificattr)
+                {
+                       var sourseElementText = this.elements[sourceindex];
+                       var targetElementText = this.elements[targetindex];
+                       
+                       if( sourseElementText && sourseElementText )
+                       {
+                          var sourceX = sourseElementText["elemTextPosition"]["x"];
+                          var sourceY = sourseElementText["elemTextPosition"]["y"];
+                          var targetX = targetElementText["elemTextPosition"]["x"];
+                          var targetY = targetElementText["elemTextPosition"]["y"];
+                          var attr = sourseElementText["elemText"].attr();
+                          var elemsource = canvas.text(sourceX,sourceY,sourcetext);
+                          elemsource.attr({"font-size": attr["font-size"]});
+                          elemsource.attr({"fill":attr["fill"]});
+                       }
+                       else
+                       {
+                         return;
+                       }
+                       var animationSpeed =  (specificattr && specificattr["animation_speed"]) || 1000; 
+                       if( flag == 0)
+                       {
+                           // on the above of index
+                           var height = attribs["width"] || 50;
+                           
+                            elemsource.animate({ x : sourceX , y:sourceY-height},animationSpeed,"long",successcallback01);
+                           
+                           function successcallback01()
+                           {
+                             elemsource.attr({ x : sourceX , y:sourceY-height});
+                             elemsource.animate({ x : targetX , y:sourceY-height},animationSpeed,"long",successcallback02);
+                           }
+                           function successcallback02()
+                           {
+                              elemsource.attr({ x : targetX , y:sourceY-height});
+                              elemsource.animate({ x : targetX , y:targetY },animationSpeed,"long",successcallback03);
+                           }
+                           function successcallback03()
+                           {
+                             elemsource.remove();
+                             targetElementText.setText(sourcetext);  
+                             if( typeof callback === "function")
+                             {
+                               callback();
+                             }
+                           }
+                       }
+                       else if( flag == 1)
+                       {
+                           // on the parallel to the array
+                            elemsource.remove();
+                           elemsource.animate({ x : targetX , y:targetY},animationSpeed,"long",succ);
+                           function succ()
+                           {
+                            targetElementText.setText(sourcetext);
+                              if( typeof callback === "function")
+                             {
+                                callback();
+                             }
+                           }
+                       }
+                       else
+                       {
+                           height = attribs["width"] || 50; 
+                           elemsource.animate({ x : sourceX , y:sourceY+height},animationSpeed,"long",successcallback21);
+                           
+                           function successcallback21()
+                           {
+                             elemsource.attr({ x : sourceX , y:sourceY+height});
+                             elemsource.animate({ x : targetX , y:sourceY+height},animationSpeed,"long",successcallback22);
+                           }
+                           function successcallback22()
+                           {
+                              elemsource.attr({ x : targetX , y:sourceY+height}); 
+                              elemsource.animate({ x : targetX , y:targetY },animationSpeed,"long",successcallback23);
+                           }
+                           function successcallback23()
+                           {
+                              elemsource.remove();
+                             targetElementText.setText(sourcetext); 
+                             if( typeof callback === "function")
+                             {
+                                callback();
+                             }
+                           } 
+                       
+                       }
+                       // assuming the sourceindex and the targetindex are valid
+                       
+                }
+    this.getValues = function( )
+             {
+                var values = [];
+                for(var i in this.elements)
+                {
+                  values[i] = this.elements[i].getText();
+                }
+                return values;
+             }             
+   function main()
     {
+        attribs = attribs || {};
        if(arraycontext.len === arraycontext.arr.length)
        {
            for(var i=0;i<arraycontext.len;i++)
            {
-               arraycontext.elements[i] = new Element(arraycontext.arr[i],attribs["text"]);
+               arraycontext.elements[i] = new Element(arraycontext.arr[i],attribs["element"]);
            }
        }
        else
        {
            for(var i=0;i<arraycontext.len;i++)
            {
-               attribs = attribs || {};
+               
                arraycontext.elements[i] = new Element("",attribs["element"]);
            }
        }
