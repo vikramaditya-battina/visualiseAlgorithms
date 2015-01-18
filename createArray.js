@@ -1,3 +1,5 @@
+ANIMATIONS_PAUSE = {};
+IS_PAUSED = false;
 function createCanvas()
 {
     canvas = Raphael("canvas",1000,500);
@@ -124,7 +126,7 @@ function  MyArray(sx,sy,w,d,arr,attribs)
           var textgap = (attributes["pointer-text-size"]) || 0;
           textgap = textgap/2 + 5;
           
-          if(flag === true) //top
+          if( flag === true ) //top
           {
              
              this.x2 = elempos["sx"]+elempos["w"]/2;
@@ -178,25 +180,46 @@ function  MyArray(sx,sy,w,d,arr,attribs)
                               var animationspeed = attributes["animation-speed"] || 1000;
                               var pointergap = this.attributes["pointer-gap"] || 5 ;
                               var pointerheight = this.attributes["height"] || 25;
+                              var animationName = "PointerText"+elemindex; 
                               if(this.flag === true)
                               {
                                   this.x2 = elempos["sx"]+elempos["w"]/2;
                                   this.y2 = elempos["sy"]-pointergap;
                                   this.x1 = this.x2;
-                                  this.y1 = this.y2-pointerheight;                           
-                                  this.pointerText.animate({x:this.x1,y:this.y1-textgap},animationspeed,"long",null);
+                                  this.y1 = this.y2-pointerheight;
+                                  this.pointerText.animate({x:this.x1,y:this.y1-textgap},animationspeed,"long",pointerTextsucccall);
+                                  //console.log("Pointer Text Not Stored");
+                                  ANIMATIONS_PAUSE[animationName] = this.pointerText;
+                                  //console.log("Pointer Text Stored");
                               }
                               else if( this.flag === false)
                               {
                                   this.x2 = elempos["sx"]+elempos["w"]/2;
                                   this.y2 = elempos["sy"]+elempos["d"]+pointergap;
                                   this.x1 = this.x2;
-                                  this.y1 = this.y2 + pointerheight;
-                                  this.pointerText.animate({x:this.x1,y:this.y1+textgap},animationspeed,"long",null);
+                                  this.y1 = this.y2 + pointerheight; 
+                                  this.pointerText.animate({x:this.x1,y:this.y1+textgap},animationspeed,"long",pointerTextsucccall);
+                                  //console.log("Pointer Text Not Stored");
+                                  ANIMATIONS_PAUSE[animationName] = this.pointerText;
+                                  //console.log("Pointer Text Stored");
                               }
                               var command = "M"+this.x1+" ,"+this.y1+"L"+this.x2+" ,"+this.y2;
-                              
-                              this.pointer.animate({"path":command},animationspeed,"long",callback);
+                              var pointerAnimationName = "Pointer"+elemindex;
+                              this.pointer.animate({"path":command},animationspeed,"long",pointercallback);
+                              console.log("Pointer Not Stored");
+                              ANIMATIONS_PAUSE[pointerAnimationName] = this.pointer;
+                              console.log("Pointer Stored");
+                              function pointerTextsucccall()
+                              {
+                                 var animationNamee = "PointerText"+elemindex;
+                                 ANIMATIONS_PAUSE[animationNamee] = null;
+                              }
+                              function pointercallback()
+                              {
+                                var animationNamee = "Pointer"+elemindex;
+                                ANIMATIONS_PAUSE[animationNamee] = null;
+                                callback();
+                              }
                               
                               
                         }
@@ -282,14 +305,14 @@ function  MyArray(sx,sy,w,d,arr,attribs)
                        {
                          return;
                        }
+                       var animationName = "moveElement"+sourceindex+"$"+targetindex+"$"+flag;
                        var animationSpeed =  (specificattr && specificattr["animation_speed"]) || 1000; 
                        if( flag == 0)
                        {
                            // on the above of index
                            var height = attribs["width"] || 50;
-                           
-                            elemsource.animate({ x : sourceX , y:sourceY-height},animationSpeed,"long",successcallback01);
-                           
+                           elemsource.animate({ x : sourceX , y:sourceY-height},animationSpeed,"long",successcallback01);
+                           ANIMATIONS_PAUSE[animationName] = elemsource;
                            function successcallback01()
                            {
                              elemsource.attr({ x : sourceX , y:sourceY-height});
@@ -302,6 +325,8 @@ function  MyArray(sx,sy,w,d,arr,attribs)
                            }
                            function successcallback03()
                            {
+                             var animationName = "moveElement"+sourceindex+"$"+targetindex+"$"+flag;
+                             ANIMATIONS_PAUSE[animationName] = null;
                              elemsource.remove();
                              targetElementText.setText(sourcetext);  
                              if( typeof callback === "function")
@@ -315,20 +340,23 @@ function  MyArray(sx,sy,w,d,arr,attribs)
                            // on the parallel to the array
                             elemsource.remove();
                            elemsource.animate({ x : targetX , y:targetY},animationSpeed,"long",succ);
+                           ANIMATIONS_PAUSE[animationName] = elemsource;
                            function succ()
                            {
-                            targetElementText.setText(sourcetext);
+                             var animationName = "moveElement"+sourceindex+"$"+targetindex+"$"+flag;
+                             ANIMATIONS_PAUSE[animationName] = null;
+                             targetElementText.setText(sourcetext);
                               if( typeof callback === "function")
-                             {
+                              {
                                 callback();
-                             }
+                              }
                            }
                        }
                        else
                        {
                            height = attribs["width"] || 50; 
                            elemsource.animate({ x : sourceX , y:sourceY+height},animationSpeed,"long",successcallback21);
-                           
+                           ANIMATIONS_PAUSE[animationName] = elemsource;
                            function successcallback21()
                            {
                              elemsource.attr({ x : sourceX , y:sourceY+height});
@@ -341,6 +369,7 @@ function  MyArray(sx,sy,w,d,arr,attribs)
                            }
                            function successcallback23()
                            {
+                              ANIMATIONS_PAUSE[animationName] = null;
                               elemsource.remove();
                              targetElementText.setText(sourcetext); 
                              if( typeof callback === "function")
@@ -384,4 +413,51 @@ function  MyArray(sx,sy,w,d,arr,attribs)
     main();
  }
   
+function pauseAnimations()
+{
+  for(var element in ANIMATIONS_PAUSE)
+  {
+    if( ANIMATIONS_PAUSE[element] )
+    {
+      console.log(element);
+      ANIMATIONS_PAUSE[element].pause();
+    }
+  }
+}
+function resumeAnimations()
+{
+  for(var element in ANIMATIONS_PAUSE)
+  {
+    if( ANIMATIONS_PAUSE[element])
+    {
+      console.log(element);
+      ANIMATIONS_PAUSE[element].resume();
+    }
+  }
+}
 
+function pleasePause()
+{
+  setTimeout(timeOutCallback,100);
+  function timeOutCallback()
+  {
+    if( IS_PAUSED === true)
+    {
+      pauseAnimations();
+      console.log("pausing");
+      pleasePause();
+    }
+  }
+}
+function pauseIt()
+{
+  IS_PAUSED = true;
+  pauseAnimations();
+  pleasePause();
+}
+function resumeIt()
+{
+  IS_PAUSED = false;
+  console.log("resuming");
+  resumeAnimations();
+}

@@ -1,8 +1,11 @@
 /*
   Assuming all the values in the bubble sort are numbers 
 */
-function BubbleSort()
+function BubbleSort(startx,starty,arr)
 {  var context = this;
+   context.startx = startx;
+   context.starty = starty;
+   context.values = arr;
    function main()
    {
         var unsorted = Constants && Constants["bubble"] && Constants["bubble"]["unsorted"];
@@ -10,8 +13,16 @@ function BubbleSort()
         {
            var attribs = { "element" : unsorted };
         }
-        context.arr = new MyArray(100,100,50,50,[4,1,22,3,3,6,2,15,2,1,12,10,15],attribs);
+        if( arr && arr instanceof Array)
+        {
+          context.arr = new MyArray(startx || 100, starty || 100,Constants["bubble"]["width"]|| 50,Constants["bubble"]["width"] ||50,arr,attribs);
+        }
+        else
+        {
+          context.arr = new MyArray(startx || 100,starty || 100,Constants["bubble"]["width"] || 50,Constants["bubble"]["width"] || 50,[4,1,22,3,3,6,2,15,2,1,12,10,15],attribs);
+        }
         context.values = context.arr.getValues();
+        
         context.len = context.values.length;
         for(var i in context.values)
         {
@@ -53,29 +64,48 @@ function BubbleSort()
    function comp()
    {
       var defaultvalues = { "cx" : 50,"cy":50,"r":25};
+      var width = Constants["bubble"]["width"];
+      if(  context.values && context.values instanceof Array )
+      {
+        var len = context.values.length;
+      }
+      var cx1 = context.startx + len/2*width;
+      var cy1 = context.starty - width - 35;
+      var gap = (Constants && Constants["bubble"] && Constants["bubble"]["operand1"] && Constants["bubble"]["operand1"]["circle"]["gap"])||30;
+      var radius = (Constants && Constants["bubble"] && Constants["bubble"]["operand1"] && Constants["bubble"]["operand1"]["circle"]["radius"])||30;
+      var cx2 = cx1 + 2*parseInt(radius,10) + gap;
+      var cy2 = cy1;
       var finalValueOperand1 = (Constants && Constants["bubble"] && Constants["bubble"]["operand1"] && Constants["bubble"]["operand1"]["circle"]) || defaultvalues;
       var operand1 = canvas.circle();
       operand1.attr(finalValueOperand1);
+      operand1.attr({"cx":cx1,"cy":cy1,"r":radius});
       context.operand1 = operand1;
       defaultvalues = { "cx" : 85,"cy":50,"r":25}
       var finalValueOperand2 = (Constants && Constants["bubble"] && Constants["bubble"]["operand2"] && Constants["bubble"]["operand2"]["circle"]) || defaultvalues;
  
       var operand2 = canvas.circle(); 
       operand2.attr(finalValueOperand2);
+      operand2.attr({"cx":cx2,"cy":cy2,"r":radius});
       context.operand2 = operand2;
       
       var operator = canvas.text();
       defaultvalues = { x: 78 , y:50};
+      var opx = (cx1 + cx2)/2;
+      var opy = cy1;
       var finalValueOperator = (Constants && Constants["bubble"] && Constants["bubble"]["operator"]) || defaultvalues  ;
       operator.attr(finalValueOperator) ;
-      operator.attr({"text":"="});
+      operator.attr({"x":opx , "y":opy});
+      operator.attr({"text":""});
       context.operator = operator;
       
       defaultvalues = { x: 160 , y:50};
+      var stmtx = cx2+ radius + ((Constants && Constants["bubble"] && Constants["bubble"]["stmt"]["gap"])|| 30);
+      var stmty = cy1;
       var finalValueStmt = (Constants && Constants["bubble"] && Constants["bubble"]["stmt"]) || defaultvalues  ;
       stmt = canvas.text();
       stmt.attr(finalValueStmt);
-      stmt.attr({"text":"swap It"});
+      stmt.attr({"x":stmtx , "y":stmty});
+      stmt.attr({"text":""});
       context.stmt = stmt;  
    }
    function comparision(index1,index2,succcallback)
@@ -104,17 +134,20 @@ function BubbleSort()
         var operand1X = context.operand1.attr()["cx"];
         var operand1Y = context.operand1.attr()["cy"];
         var operand1attr = context.operand1.attr();
-        
+        ANIMATIONS_PAUSE["COMP2"] = temp2;
         var operand2X = context.operand2.attr()["cx"];
         var operand2Y = context.operand2.attr()["cy"];
         var operand2attr = context.operand2.attr();
         var animationspeed = (attribs && attribs["animation_speed"]) || 1000;
+        
         temp1.animate({ x : operand1X , y: operand1Y },animationspeed,"long",callback1);
+        ANIMATIONS_PAUSE["COMP1"] = temp1;
         temp2.animate({ x : operand2X , y: operand2Y },animationspeed,"long",callback2);
+        ANIMATIONS_PAUSE["COMP2"] = temp2;
         var done1 = false,done2 = false;
-       
         function callback1()
          {
+           ANIMATIONS_PAUSE["COMP1"] = null;
            var onfocusattr = (Constants && Constants["bubble"] && Constants["bubble"]["operand1"] && Constants["bubble"]["operand1"]["onfocuscircle"]);
            if ( onfocusattr != undefined)
            {
@@ -126,6 +159,7 @@ function BubbleSort()
          
          function callback2()
          {
+           ANIMATIONS_PAUSE["COMP2"] = null;
            var onfocusattr = (Constants && Constants["bubble"] && Constants["bubble"]["operand2"] && Constants["bubble"]["operand2"]["onfocuscircle"]);
            if ( onfocusattr != undefined)
            {
@@ -243,7 +277,7 @@ function BubbleSort()
                     
                     outer_loop(i+1);
                  });
-              }              
+              }             
            }
            else
            {

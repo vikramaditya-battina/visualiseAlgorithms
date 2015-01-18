@@ -31,13 +31,13 @@ Constants = {
     }
   },
   "bubble": {
+  "width": 75,
     "operand1": {
       "circle": {
         "stroke": "#4F8DF7",
         "fill": "#BECCF7",
-        "cx": 50,
-        "r": 20,
-        "cy": 50
+        "radius":20,
+        "gap": 60
       },
       "text": {
         "fill": "#FFFFFF"
@@ -52,9 +52,7 @@ Constants = {
       "circle": {
         "stroke": "#4F8DF7",
         "fill": "#A0BEF2",
-        "cx": 115,
-        "r": 20,
-        "cy": 50
+        "radius":20
       },
       "text": {
         "fill": "#FFFFFF"
@@ -66,16 +64,13 @@ Constants = {
       }
     },
     "operator": {
-      "fill": "#BF5656",
-      "y": 50,
-      "x": 80,
-      "font-size": 40
+      "fill": "#4374FA",
+      "font-size": 40,
     },
     "stmt": {
-      "fill": "#BF5656",
-      "y": 50,
-      "x": 180,
-      "font-size": 25
+      "fill": "#4374FA",
+      "font-size": 25,
+      "gap":60
     },
     "sorted": {
       "fill": "#4F8DF7"

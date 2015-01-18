@@ -9,14 +9,66 @@
     
     <script type="text/javascript" src="bubblesortCreation.js"></script>  
     <script type="text/javascript" src="main.js"></script>
+    <script src="../jquery-1.11.1.js"></script>
+    <script src="../jquery-ui-1.11.1.custom/jquery-ui.js"></script>
+    <link rel="stylesheet" href="../jquery-ui-1.11.1.custom/jquery-ui.css">
+    <link rel="stylesheet" type="text/css" href="styleSheet.css"></link>
+      <style>
+ .ui-dialog
+ {
+    border:0px solid white; 
+ }
+ .ui-dialog-content {
+ 
+ border-radius : 6px;
+ background-color: #9DC1ED !important;
+ color: white;
+}
+.ui-dialog-titlebar {
+ background-image: none;
+     border:2px solid #4D9AF7;
+    background: -webkit-linear-gradient(#055FFA, #055FFA); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(#055FFA, #72A3F7); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(#055FFA, #72A3F7); /* For Firefox 3.6 to 15 */
+    background: linear-gradient( #055FFA, #72A3F7); /* Standard syntax (must be last) */
+}
+#ui-dialog-title-dialog {
+ color: red !important;
+ text-shadow: none;
+}
+</style>
+     
    </head>
    
    <body>
-   <div id="titleheader">Bubble Sort </div>
-    <div id="canvas"> </div>
+        <div id="validInput" title="Please Have valid Data">
+       <p>Please give valid input that is numbers for the good comparisions, so that we can understand better </p>
+       </div>
+       
+        <div id="pleaseInput" title="Please Enter , separated Values">
+       <p>Please enter , spereated numbers </p>
+       </div>
+         <div id="validSize" title="Please provide valid length">
+        <p>Might be  Length of Array doesn't fit in the screen</p>
+       </div>
+       <div id="overlay"></div>
+       <div id = "titlecontainer"><h2>Bubble Sort Implementation</h2></div>
+       <div id="inputcontainer">
+            <div id="sortInputContainer">
+                <button type="button" id="startSortButton" class="button">Start Sort</button>
+                <input type="text" name="sortInputVal" placeholder="Enter , separated input value "  id="sortInputVal" class="textfield"></input>
+            </div>
+
+            <div id = "resumeContainer">
+                <button type="button" id="resumeButton" class="button">Resume</button>
+            </div>
+            
+            <div id = "pauseContainer">
+                <button type="button" id="pauseButton" class="button">Pause</button>
+            </div>
+            
+            
+       </div>
+    <div id="canvas"></div>
    </body>
-     
-    
-   
- 
 </html>
