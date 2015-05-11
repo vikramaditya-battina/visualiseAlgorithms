@@ -95,7 +95,7 @@ html,body
     box-shadow: 0 0 10px #07c;
 }
 
-#resumeButton
+#terminateButton
 {
  width : 100%;
  margin-right:2%;
@@ -107,7 +107,7 @@ html,body
   width : 88%;
 }
 
-#pauseButton
+#stopButton
 {
   width : 100%;
   padding : 0;

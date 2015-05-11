@@ -172,11 +172,44 @@ function  MyArray(sx,sy,w,d,arr,attribs)
                      //assuming element idex starts from 1..len
                      {
                      
-                        if(elemindex <= arraycontext.len)
+                         function pointerTextsucccall()
+                              {
+                                 var animationNamee = "PointerText"+elemindex;
+                                 ANIMATIONS_PAUSE[animationNamee] = null;
+                              }
+                              function pointercallback()
+                              {
+                                var animationNamee = "Pointer"+elemindex;
+                                ANIMATIONS_PAUSE[animationNamee] = null;
+                                callback();
+                              }
+                        if(elemindex > 0 && elemindex <= arraycontext.len)
                         {
-                             var textgap = (this.attributes["pointer-text-size"]) || 0;
-                             textgap = textgap/2 + 5;
                               var elempos = arraycontext.elements[elemindex-1]["elemPosition"];
+                        }
+                        else if(elemindex > 0)
+                        {
+                            //throw error
+                            var elempos = arraycontext.elements[arraycontext.len-1]["elemPosition"];
+                            var temp = {};
+                            temp["sx"] = elempos["sx"]+elempos["w"];
+                            temp["sy"] = elempos["sy"];
+                            temp["w"] = elempos["w"];
+                            temp["d"]  = elempos["d"];
+                            elempos = temp;
+                        }
+                        else 
+                        {
+                           var elempos = arraycontext.elements[0]["elemPosition"];
+                            var temp = {};
+                            temp["sx"] = elempos["sx"]-elempos["w"];
+                            temp["sy"] = elempos["sy"];
+                            temp["w"] = elempos["w"];
+                            temp["d"]  = elempos["d"];
+                            elempos = temp;
+                        }
+                               var textgap = (this.attributes["pointer-text-size"]) || 0;
+                               textgap = textgap/2 + 5;
                               var animationspeed = attributes["animation-speed"] || 1000;
                               var pointergap = this.attributes["pointer-gap"] || 5 ;
                               var pointerheight = this.attributes["height"] || 25;
@@ -209,24 +242,6 @@ function  MyArray(sx,sy,w,d,arr,attribs)
                               console.log("Pointer Not Stored");
                               ANIMATIONS_PAUSE[pointerAnimationName] = this.pointer;
                               console.log("Pointer Stored");
-                              function pointerTextsucccall()
-                              {
-                                 var animationNamee = "PointerText"+elemindex;
-                                 ANIMATIONS_PAUSE[animationNamee] = null;
-                              }
-                              function pointercallback()
-                              {
-                                var animationNamee = "Pointer"+elemindex;
-                                ANIMATIONS_PAUSE[animationNamee] = null;
-                                callback();
-                              }
-                              
-                              
-                        }
-                        else
-                        {
-                            //throw error
-                        }
                      }                     
           
         }

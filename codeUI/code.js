@@ -49,7 +49,7 @@ visualise.codeANM = Class({
             button123.style["border-radius"] = "100%";
             button123.style["background"] = (this.properties["breakPointUnselectColor"])?this.properties["breakPointUnselectColor"]:properties["normalColor"];
             button123.appendChild(buttonTextNode);
-            this.registerBreakPoint(button123,i);
+            this.registerBreakPoint(button123,i+1);
             divElement.appendChild(button123);
             divElement.appendChild(divTextNode);
             for( var stylekeys in properties)
@@ -123,53 +123,78 @@ visualise.codeANM = Class({
          this.CodeLineMap = CodeLineMap;
     },
     
-    "moveNext" :  function(scopeObj,successcallback,errorcallback,conditionalFlag){
+    "moveNext" :  function(scopeObj,successcallback,errorcallback,forceNextLine){
          // conditionalFlag say whether we need to execute take nextLine property or need to take the statement properties
          //handler flag says whether we need to execute the handler or not
-         if(!currentLineNum === "EOF")
+         //forceNextLine helps whether to execute or not if forceNextLine is true then it will execute if is break point also
+         var currentScopeObj = this;
+
+         var currentLineNum = this.programCounter;
+         if(currentLineNum === "EOF")
          {
             errorcallback();
             return;
          }
-         var currentLineNum = this.programCounter;
+         this.makeHighLite(currentLineNum,true);
+         if( forceNextLine !== true && this.pleaseStop && this.pleaseStop === true)
+         {
+            errorcallback({"error":"BREAK_POINT_REACHED"});
+            return;
+         }
+         else if( forceNextLine !== true && this.breakPointLines[currentLineNum] === true)
+         {
+             //hold break point reached so please stop u cannot proceed
+             errorcallback({"error":"BREAK_POINT_REACHED"});
+             return;
+         }
          var lineProperties = this.CodeLineMap[String(currentLineNum)];
          var statementType = lineProperties && lineProperties["statementType"];
          //at present we have only there two statements
-         this.makeHighLite(currentLineNum,true);
          if(statementType == "IF_CONDITIONAL")
          {
             var statementDefinedProps = lineProperties["statementDefinedProps"];
             var trueLineNum  = statementDefinedProps["IF_CONDITIONAL_TRUE_LINE_NUM"];
             var falseLineNum = statementDefinedProps["IF_CONDITIONAL_FALSE_LINE_NUM"];
-            if( conditionalFlag == true)
-            {
-               this.programCounter = trueLineNum;
-            }
-            else
-            {
-               this.programCounter = falseLineNum;
-            }
          }
          else if(statementType == "WHILE_CONDITIONAL")
          {
               var statementDefinedProps = lineProperties["statementDefinedProps"];
               var trueLineNum  = statementDefinedProps["WHILE_CONDITIONAL_TRUE_LINE_NUM"];
-              var falseLineNum = statementDefinedProps["WHILE_CONDITIONAL_FALSE_LINE_NUM"];
-              if( conditionalFlag == true)
-              {
-                 this.programCounter = trueLineNum;
-              }
-              else
-              {
-                 this.programCounter = falseLineNum;
-              }  
+              var falseLineNum = statementDefinedProps["WHILE_CONDITIONAL_FALSE_LINE_NUM"];  
          }
          else
          {
             var nextLineNumber = lineProperties["nextLine"];
             this.programCounter = nextLineNumber;
          } 
-         lineProperties["handler"].call(scopeObj,successcallback);
+         lineProperties["handler"].call(scopeObj,moveNextsuccesscallback);
+         function moveNextsuccesscallback(conditionalFlag)
+        {
+           if( statementType === "WHILE_CONDITIONAL")
+           {
+                if( conditionalFlag == true)
+              {
+                 currentScopeObj.programCounter = trueLineNum;
+              }
+              else
+              {
+                 currentScopeObj.programCounter = falseLineNum;
+              }
+           }
+           else if( statementType === "IF_CONDITIONAL")
+           {
+                if( conditionalFlag == true)
+               {
+                   currentScopeObj.programCounter = trueLineNum;
+               }
+               else
+               {
+                   currentScopeObj.programCounter = falseLineNum;
+               }
+           } 
+           if( typeof successcallback === 'function')
+           successcallback();
+        }
     },
     "registerBreakPoint":function(button,linenum)
     {
@@ -198,10 +223,28 @@ visualise.codeANM = Class({
            {
               if(codeLineMap[linenum])
               {
-               var divElement = document.getElementById(codeLineMap[linenum]["lineDiv"]);
+               var divElement = document.getElementById(codeLineMap[linenum]["lineDiv"]["id"]);
                parentCodeContainer.removeChild(divElement);
              }
            }
+           //parentCodeContainer.remove();
+    },
+    "isBreakPointLine" : function(linenum)
+    {
+           if( linenum && this.breakPointLines[String(linenum)] === true)
+              return true;
+          return false;
+    },
+    "stopIt" : function()
+    {
+
+        this.pleaseStop = true;
+       // this.breakPointLines[String(nextLineToBeExecuted)] = true;
+    },
+    "continueIt" : function()
+    {
+       delete this.pleaseStop;
     }
+
 
 });

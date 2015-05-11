@@ -46,7 +46,7 @@ visualise.InsertionSort = Class({
 	},
     "initialiseCode" : function()
     {
-        var codeString = 'var j = 2;          \nwhile(j < length){\n  var key = Array[j];\n  var i = j - 1;\n  while( i > 0 && Array[i] > key ){\n     Array[i+1] = Array[i]\n     i = i - 1;\n  }\n  j = j+1;\n}';
+        var codeString = 'var outer = 2;\nwhile(outer < length){\n     var key = Array[outer];\n  var inner = outer - 1;\n  while( inner > 0 && Array[inner] > key ){\n     Array[inner+1] = Array[inner]\n     inner = inner - 1;\n  }\n  Array[inner+1] = key;\nouter = outer+1;\n}\n';
         var codeANMProps = Constants["insertion"] && Constants["insertion"]["codeANM"];
         codeANMProps = (codeANMProps)?codeANMProps:{"highliteColor":"#009900","normalColor":"#808066"};
         this.insertionCodeANM = new visualise.codeANM(codeString,codeANMProps);
@@ -60,9 +60,9 @@ visualise.InsertionSort = Class({
             codeLineMap["1"] && ( codeLineMap["1"]["comments"] = "initialising_the_outer_pointer" );
             
             codeLineMap["2"] && ( codeLineMap["2"]["statementType"] = "WHILE_CONDITIONAL" );
-            codeLineMap["2"] && codeLineMap["2"]["statementDefinedProps"] && (codeLineMap["2"]["statementDefinedProps"]["WHILE_CONDITIONAL_TRUE_LINE_NUM"] = 3);
-            codeLineMap["2"] && codeLineMap["2"]["statementDefinedProps"] && (codeLineMap["2"]["statementDefinedProps"]["WHILE_CONDITIONAL_FALSE_LINE_NUM"] = 13);
-            codeLineMap["2"] && ( codeLineMap["2"]["handler"] = function(succ){succ();});
+            codeLineMap["2"] && codeLineMap["2"]["statementDefinedProps"] && (codeLineMap["2"]["statementDefinedProps"]["WHILE_CONDITIONAL_TRUE_LINE_NUM"] = "3");
+            codeLineMap["2"] && codeLineMap["2"]["statementDefinedProps"] && (codeLineMap["2"]["statementDefinedProps"]["WHILE_CONDITIONAL_FALSE_LINE_NUM"] = "12");
+            codeLineMap["2"] && ( codeLineMap["2"]["handler"] = this.checkingOuterWithLength);
             codeLineMap["2"] && ( codeLineMap["2"]["comments"] = "checking_length_outer+pointer" );
 
             codeLineMap["3"] && ( codeLineMap["3"]["statementType"] = "ASSIGMENT" );
@@ -74,6 +74,57 @@ visualise.InsertionSort = Class({
             codeLineMap["4"] && ( codeLineMap["4"]["nextLine"] = "5" );
             codeLineMap["4"] && ( codeLineMap["4"]["handler"] = this.initialiseInnerPointer);
             codeLineMap["4"] && ( codeLineMap["4"]["comments"] = "assigning_the_innerPointer");
+
+            codeLineMap["5"] && ( codeLineMap["5"]["statementType"] = "WHILE_CONDITIONAL" );
+            codeLineMap["5"] && codeLineMap["5"]["statementDefinedProps"] && (codeLineMap["5"]["statementDefinedProps"]["WHILE_CONDITIONAL_TRUE_LINE_NUM"] = "6");
+            codeLineMap["5"] && codeLineMap["5"]["statementDefinedProps"] && (codeLineMap["5"]["statementDefinedProps"]["WHILE_CONDITIONAL_FALSE_LINE_NUM"] = "9");
+            codeLineMap["5"] && ( codeLineMap["5"]["handler"] = this.moveTheValueForComparision);
+            codeLineMap["5"] && ( codeLineMap["5"]["comments"] = "comparing the values with inner for loop");
+
+            codeLineMap["6"] && ( codeLineMap["6"]["statementType"] = "ASSIGMENT" );
+            codeLineMap["6"] && ( codeLineMap["6"]["nextLine"] = "7" );
+            codeLineMap["6"] && ( codeLineMap["6"]["handler"] = this.moveTheValueElement);
+            codeLineMap["6"] && ( codeLineMap["6"]["comments"] = "moving the element in to its higher index");
+
+            codeLineMap["7"] && ( codeLineMap["7"]["statementType"] = "ASSIGMENT" );
+            codeLineMap["7"] && ( codeLineMap["7"]["nextLine"] = "8" );
+            codeLineMap["7"] && ( codeLineMap["7"]["handler"] = this.decrementInnerPointer);
+            codeLineMap["7"] && ( codeLineMap["7"]["comments"] = "decrementing the inner pointer");
+
+            codeLineMap["8"] && ( codeLineMap["8"]["statementType"] = "ASSIGMENT" );
+            codeLineMap["8"] && ( codeLineMap["8"]["nextLine"] = "5" );
+            codeLineMap["8"] && ( codeLineMap["8"]["handler"] = function(succcallback){
+                if( typeof succcallback === 'function')
+                    succcallback();
+            });
+            codeLineMap["8"] && ( codeLineMap["8"]["comments"] = "decrementing the inner pointer");
+
+            codeLineMap["10"] && ( codeLineMap["10"]["statementType"] = "ASSIGMENT" );
+            codeLineMap["10"] && ( codeLineMap["10"]["nextLine"] = "11" );
+            codeLineMap["10"] && ( codeLineMap["10"]["handler"] = this.incrementOuterPointer);
+            codeLineMap["10"] && ( codeLineMap["10"]["comments"] = "incrementing the outer pointer");
+
+
+            codeLineMap["9"] && ( codeLineMap["9"]["statementType"] = "ASSIGMENT" );
+            codeLineMap["9"] && ( codeLineMap["9"]["nextLine"] = "10" );
+            codeLineMap["9"] && ( codeLineMap["9"]["handler"] = this.moveTheKeyValueBackToArray);
+            codeLineMap["9"] && ( codeLineMap["9"]["comments"] = "moving the key value back to array");
+
+            codeLineMap["11"] && ( codeLineMap["11"]["statementType"] = "ASSIGMENT" );
+            codeLineMap["11"] && ( codeLineMap["11"]["nextLine"] = "2" );
+            codeLineMap["11"] && ( codeLineMap["11"]["handler"] = function (succcallback){
+            	if( typeof succcallback === 'function')
+            		succcallback();
+            });
+            codeLineMap["12"] && ( codeLineMap["12"]["comments"] = "it is a closing brace so moving back to Top...");
+
+            codeLineMap["12"] && ( codeLineMap["12"]["statementType"] = "DUMMY" );
+            codeLineMap["12"] && ( codeLineMap["12"]["nextLine"] = "EOF" );
+            codeLineMap["12"] && ( codeLineMap["12"]["handler"] = function (succcallback){
+            	if( typeof succcallback === 'function')
+            		succcallback();
+            });
+            codeLineMap["12"] && ( codeLineMap["12"]["comments"] = "Finally it is the end of the code");            
     	}
     },
 	"initialiseComparisonOperators" : function(){
@@ -175,9 +226,19 @@ visualise.InsertionSort = Class({
 		        if (flag == 1) {
 		            var finalOperandX = this.operand1.attr()["cx"];
 		            var finalOperandY = this.operand1.attr()["cy"];
+                    if( typeof this.operand1Text !== 'undefined')
+                    {
+                        this.operand1Text.remove();
+                    } 
+                    this.operand1Text = temp;
 		        } else if (flag == 2) {
 		            var finalOperandX = this.operand2.attr()["cx"];
 		            var finalOperandY = this.operand2.attr()["cy"];
+                    if( typeof this.operand2Text !== 'undefined')
+                    {
+                        this.operand2Text.remove();
+                    }
+                    this.operand2Text = temp;
 		        }
 		        var animationspeed = (attribs && attribs["animation_speed"]) || 1000;
 		        temp.animate({
@@ -199,8 +260,7 @@ visualise.InsertionSort = Class({
 	"compareIt"  : function(op1Value, op2Value, succcallback){
 				var op1Value = parseInt(op1Value, 10);
 		        var op2Value = parseInt(op2Value, 10);
-		        alert(op1Value);
-		        alert(op2Value);
+
 		        if (op1Value > op2Value) {
 		            this.operator.attr({
 		                "text": ">"
@@ -209,6 +269,7 @@ visualise.InsertionSort = Class({
 		                "text": "Continue..."
 		            });
 		            succcallback(true);
+		            return;
 		        } else if (op1Value < op2Value) {
 		            this.operator.attr({
 		                "text": "<"
@@ -216,7 +277,8 @@ visualise.InsertionSort = Class({
 		            this.stmt.attr({
 		                "text": "InserIt,BreakIt"
 		            });
-		            succcallback(false)
+		            succcallback(false);
+		            return;
 		        } else {
 		            this.operator.attr({
 		                "text": "="
@@ -225,6 +287,7 @@ visualise.InsertionSort = Class({
 		                "text": "Continue..."
 		            });
 		            succcallback(false);
+		            return;
 		        }
 	           succcallback(false);	        
     },
@@ -275,33 +338,136 @@ visualise.InsertionSort = Class({
         var outerIndexValue = this.outerPointerIndex;
         this.innerpointerindex = outerIndexValue-1;
         this.initialiseInnerPointerParams && ( this.initialiseInnerPointerParams["innerpointerindex"] =this.innerpointerindex);
-        this.moveToComparioson(outerIndexValue, 2,succcallback);
+        this.moveToComparioson(outerIndexValue-1, 2,succcallback);
     },
     "moveTheValueForComparision" : function(succcallback){
     	var innerpointerindex = this.innerpointerindex;
     	var outerpointerindex = this.outerPointerIndex;
-    	function succ()
+    	var scopeObj =this;
+    	function succc()
     	{
-          var op1Value = this.arr.elements[innerpointerindex].getText();
-          var op2Value = this.arr.elements[outerpointerindex].getText();
-    	  this.compareIt(op1Value,op2Value,succcallback);	
+          var op1Value = scopeObj.arr.elements[innerpointerindex-1].getText();
+          var op2Value = scopeObj.operand2Text.attr()["text"];
+        
+    	  scopeObj.compareIt(op1Value,op2Value,succcallback);	
     	}
-    	this.moveToComparioson(innerpointerindex,1,succ);
+        if( innerpointerindex <= 0)
+        {
+           succcallback(false);
+           return;
+        }
+    	this.moveToComparioson(innerpointerindex-1,1,succc);
     },
-    "startSort":function(succcallback)
+    "checkingOuterWithLength" : function(succcallback)
+    {
+    	var outerPointerIndex = this.outerPointerIndex;
+    	var length = this.len;
+    	if( length >= outerPointerIndex )
+    	{
+    		if( typeof succcallback === 'function')
+    		{
+    			succcallback(true);
+    		}
+            return;
+
+    	}
+    	else
+    	{
+            if( typeof succcallback === 'function')
+            {
+            	succcallback(false);
+            }
+            return;
+    	}
+    },
+    "startSort":function(succcallback,errorcallback)
     {
        var con = this;
        this.insertionCodeANM.moveNext(this,succ,err);
-       function succ(res)
+       function succ()
        {
        	 setTimeout(function(){
-       	 	con.insertionCodeANM.moveNext(con,succ,err,res);
+       	 	con.insertionCodeANM.moveNext(con,succ,err);
        	 },1000);
        	 
        }
-       function err()
+       function err(error)
        {
+       	  if( typeof errorcallback === 'function')
+       	  	errorcallback(error);
+       }
+    },
+    "moveToNextLine":function(succcallback,errorcallback)
+    {
+    	 //this function explicity move to the next function irrespective of wether breakpoint or not
+         
+         function succ(res)
+         {
+             if( typeof succcallback === 'function')
+             	succcallback(res)
+         }
+         function err(eror)
+         { 
+             if( typeof errorcallback === 'function')
+             	errorcallback(eror);
+         }
+         this.insertionCodeANM.moveNext(this,succ,err,true);
+    },
+    "pauseIt" : function()
+    {
+        //this will try to set the auto break point at next line, this will not stop
+        // the current execution of the lines
+        this.insertionCodeANM.stopIt();
+    },
+    "continue":function(succcallback,errorcallback)
+    {
+        var con = this;
+        this.insertionCodeANM.continueIt();
+       this.insertionCodeANM.moveNext(this,succ,err,true);
+       function succ()
+       {
+       	 setTimeout(function(){
+       	 	con.insertionCodeANM.moveNext(con,succ,err);
+       	 },1000);
        	 
        }
+       function err(error)
+       {
+       	  if( typeof errorcallback === 'function')
+       	  	errorcallback(error);
+       }
+    },
+    "moveTheValueElement": function(succcallback)
+    {
+        var innerpointerIndex = this.innerpointerindex;
+        var sourceText = this.arr.elements[innerpointerIndex-1].getText();
+        this.arr.moveElement(innerpointerIndex-1,innerpointerIndex,sourceText,0,succcallback,{"animation_speed":400});
+        return;
+    },
+    "moveTheKeyValueBackToArray":function(succcallback)
+    {
+       var temp = this.operand2Text;
+       var text = temp.attr()["text"];
+       var x = temp.attr()["x"];
+       var y = temp.attr()["y"];
+       var newTextNode = canvas.text(x,y,text);
+       var innerindexPLUSone = (this.innerpointerindex-1)+1;
+       var targetELementNode = this.arr["elements"][innerindexPLUSone];
+       var finalX =  targetELementNode["elemTextPosition"]["x"];
+       var finalY = targetELementNode["elemTextPosition"]["y"];
+       var animationspeed = 1000;
+       newTextNode.animate({
+                    x: finalX,
+                    y: finalY
+                }, animationspeed, "long", callback);
+    ANIMATIONS_PAUSE["BACKTOKEY"] = newTextNode;
+    function callback() {
+                    ANIMATIONS_PAUSE["BACKTOKEY"] = null;
+                    targetELementNode.setText(text);  
+                    newTextNode.remove();
+                    succcallback();
+                }
+       
+       
     }
 });
